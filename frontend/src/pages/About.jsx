@@ -52,7 +52,7 @@ function About(){
                         We offer a vast selection of workshops across various fields,
                          making it simple to find and book the perfect fit for your skillset.
                           From beginners to lifelong learners, Workshopwise connects you with 
-                          inspiring workshops to fuel your academic growth.
+                          inspiring workshops to fuel your growth.
                         </p>
 
                         </div>
