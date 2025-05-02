@@ -16,8 +16,10 @@ jobs:
 
       - id: check
         run: |
-          echo "frontend=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^frontend/' > /dev/null && echo true || echo false)" >> "$GITHUB_OUTPUT"
-          echo "backend=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' > /dev/null && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          frontend_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^frontend/' > /dev/null && echo true || echo false)
+          backend_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' > /dev/null && echo true || echo false)
+          echo "frontend=$frontend_changed" >> "$GITHUB_OUTPUT"
+          echo "backend=$backend_changed" >> "$GITHUB_OUTPUT"
 
   build-frontend:
     needs: detect-changes
