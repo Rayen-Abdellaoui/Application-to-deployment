@@ -1,0 +1,8 @@
+@import "rsuite/dist/rsuite.css";
+
+.sidenl{
+    font-size: 1.7rem;
+    font-family: 'Rubik';
+    font-weight: bold;
+    color: aliceblue;
+}

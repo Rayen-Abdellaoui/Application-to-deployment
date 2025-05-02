@@ -1,0 +1,12 @@
+.pag-link{
+    color: black;
+    padding: 12px;
+}
+.pag-item :hover{
+   color: #18122B;
+}
+
+.act{
+    background-color: white;
+    border-radius: 50%;
+}

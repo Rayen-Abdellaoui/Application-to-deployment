@@ -1,0 +1,42 @@
+.Work_Card{
+    width: 400px;
+    background-color: #f0eeed;
+    margin: 8px;
+}
+.card-content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    font-family: "Roboto Condensed";
+}
+
+.card-content h2{
+    font-size: 2rem;
+    font-weight: bold;
+
+}
+
+.card-content h1{
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: black;
+}
+
+.card-button{
+    padding: 5px;
+    margin: 5px;
+    width: 200px;
+    height: 50px;
+    border-radius:30px;
+    background-color: #a08ae8;
+    color: white;
+    border-style: none;
+    font-size: 1.5rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+    transition: 0.5s;
+}
+.card-button:hover{
+    transform: scale(1.05);
+}
