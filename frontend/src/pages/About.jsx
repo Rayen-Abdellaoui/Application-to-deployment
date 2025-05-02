@@ -48,7 +48,7 @@ function About(){
                         <div>
                         <h1>We Offer Innovative Learning Solutions</h1>
                         <p>
-                        Workshopwise empowers you to learn by doing. 
+                        Workshopwise empowers you to learn by doing . 
                         We offer a vast selection of workshops across various fields,
                          making it simple to find and book the perfect fit for your skillset.
                           From beginners to lifelong learners, Workshopwise connects you with 
