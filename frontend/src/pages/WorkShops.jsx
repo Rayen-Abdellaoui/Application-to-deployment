@@ -17,7 +17,7 @@ function WorkShop(){
     const fetchWorkshops = async () => {
         setisLoading(true);
       try {
-        const response = await axios.get(`/api/workShops`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/workShops`);
         setWorkshops(response.data);
         console.log(workshops);
       } catch (err) {

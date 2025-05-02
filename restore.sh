@@ -1,8 +1,9 @@
 #!/bin/bash
-echo "Waiting for MongoDB to be ready..."
-until mongosh --username admin --password adminpassword --authenticationDatabase admin --eval "db.adminCommand('ping')"; do
+echo "Waiting for MongoDB..."
+until mongosh --host mongodb --username admin --password adminpass --authenticationDatabase admin --eval "db.adminCommand('ping')" >/dev/null 2>&1; do
   sleep 2
 done
 
 echo "Restoring dump..."
-mongorestore --username admin --password adminpassword --authenticationDatabase admin /dump
+mongorestore --host mongodb --port 27017 \
+  --username admin --password adminpass --authenticationDatabase admin /dump
