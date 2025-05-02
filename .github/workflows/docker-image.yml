@@ -1,0 +1,58 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_changed: ${{ steps.check.outputs.frontend }}
+      backend_changed: ${{ steps.check.outputs.backend }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - id: check
+        run: |
+          echo "frontend=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^frontend/' > /dev/null && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          echo "backend=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' > /dev/null && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+  build-frontend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.frontend_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: rayenabd
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push frontend image
+        run: |
+          TAG=$(date +%Y%m%d%H%M%S)
+          docker build -t rayenabd/frontend:$TAG ./frontend
+          docker push rayenabd/frontend:$TAG
+
+  build-backend:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.backend_changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: rayenabd
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push backend image
+        run: |
+          TAG=$(date +%Y%m%d%H%M%S)
+          docker build -t rayenabd/backend:$TAG ./backend
+          docker push rayenabd/backend:$TAG
