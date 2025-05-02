@@ -13,13 +13,20 @@ jobs:
       backend_changed: ${{ steps.check.outputs.backend }}
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # important to compare with previous commit
 
       - id: check
         run: |
-          frontend_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^frontend/' > /dev/null && echo true || echo false)
-          backend_changed=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^backend/' > /dev/null && echo true || echo false)
+          LAST_COMMIT=$(git rev-parse HEAD^)
+          CURRENT_COMMIT=$(git rev-parse HEAD)
+          
+          frontend_changed=$(git diff --name-only $LAST_COMMIT $CURRENT_COMMIT | grep '^frontend/' > /dev/null && echo true || echo false)
+          backend_changed=$(git diff --name-only $LAST_COMMIT $CURRENT_COMMIT | grep '^backend/' > /dev/null && echo true || echo false)
+
           echo "frontend=$frontend_changed" >> "$GITHUB_OUTPUT"
           echo "backend=$backend_changed" >> "$GITHUB_OUTPUT"
+
 
   build-frontend:
     needs: detect-changes
