@@ -1,59 +1,86 @@
 pipeline {
     agent any
+
     environment {
-        DOCKERHUB_USERNAME = 'rayenabd'
-        DOCKERHUB_PASSWORD = credentials('docker_password') // Jenkins credentials ID
+        DOCKER_CREDENTIALS = 'dockerhub-credentials'  // Jenkins credential ID for Docker Hub
+        FRONTEND_IMAGE_NAME = 'rayenabd/frontend'
+        BACKEND_IMAGE_NAME = 'rayenabd/backend'
+        DOCKER_TAG = 'latest'
     }
+
     stages {
         stage('Checkout') {
             steps {
+                // Checkout the code from the repository
                 checkout scm
             }
         }
 
-        stage('Detect Changes') {
+        stage('Build Frontend Docker Image') {
+            when {
+                changeset "frontend/**"  // Trigger this stage if any file in the frontend directory changes
+            }
             steps {
                 script {
-                    def lastCommit = bat(script: "git rev-parse HEAD^", returnStdout: true).trim()
-                    def currentCommit = bat(script: "git rev-parse HEAD", returnStdout: true).trim()
-
-                    def diff = bat(script: "git diff --name-only ${lastCommit} ${currentCommit}", returnStdout: true).trim()
-                    env.FRONTEND_CHANGED = diff.contains('frontend\\') // Attention aux chemins Windows
-                    env.BACKEND_CHANGED = diff.contains('backend\\')
+                    echo 'Building Frontend Docker Image...'
+                    // Build the Frontend Docker image
+                    sh "docker build -t ${FRONTEND_IMAGE_NAME}:${DOCKER_TAG} ./frontend"
                 }
             }
         }
 
-        stage('Build and Push Frontend') {
+        stage('Push Frontend Docker Image') {
             when {
-                expression { env.FRONTEND_CHANGED == 'true' }
+                changeset "frontend/**"  // Trigger this stage if any file in the frontend directory changes
             }
             steps {
                 script {
-                    def tag = bat(script: "powershell -Command \"Get-Date -Format yyyyMMddHHmmss\"", returnStdout: true).trim()
-                    bat """
-                        echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
-                        docker build -t rayenabd/frontend:${tag} ./frontend
-                        docker push rayenabd/frontend:${tag}
-                    """
+                    echo 'Pushing Frontend Docker Image to Docker Hub...'
+                    // Login to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                    }
+                    // Push the Frontend Docker image to Docker Hub
+                    sh "docker push ${FRONTEND_IMAGE_NAME}:${DOCKER_TAG}"
                 }
             }
         }
 
-        stage('Build and Push Backend') {
+        stage('Build Backend Docker Image') {
             when {
-                expression { env.BACKEND_CHANGED == 'true' }
+                changeset "backend/**"  // Trigger this stage if any file in the backend directory changes
             }
             steps {
                 script {
-                    def tag = bat(script: "powershell -Command \"Get-Date -Format yyyyMMddHHmmss\"", returnStdout: true).trim()
-                    bat """
-                        echo ${DOCKERHUB_PASSWORD} | docker login -u ${DOCKERHUB_USERNAME} --password-stdin
-                        docker build -t rayenabd/backend:${tag} ./backend
-                        docker push rayenabd/backend:${tag}
-                    """
+                    echo 'Building Backend Docker Image...'
+                    // Build the Backend Docker image
+                    sh "docker build -t ${BACKEND_IMAGE_NAME}:${DOCKER_TAG} ./backend"
                 }
             }
+        }
+
+        stage('Push Backend Docker Image') {
+            when {
+                changeset "backend/**"  // Trigger this stage if any file in the backend directory changes
+            }
+            steps {
+                script {
+                    echo 'Pushing Backend Docker Image to Docker Hub...'
+                    // Login to Docker Hub
+                    withCredentials([usernamePassword(credentialsId: DOCKER_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                    }
+                    // Push the Backend Docker image to Docker Hub
+                    sh "docker push ${BACKEND_IMAGE_NAME}:${DOCKER_TAG}"
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Clean up
+            sh "docker logout"
         }
     }
 }
