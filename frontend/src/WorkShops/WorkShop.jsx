@@ -122,7 +122,7 @@ function WorkShop(props){
                     fontWeight : "500"
                   }}>{workshop.title} </span><br />
                   <span style={{
-                    fontSize : "2.3rem",
+                    fontSize : "2.5rem",
                     fontFamily : "Roboto Condensed",
                     fontWeight : "400"
                   }}>Training Offered by :</span> <br />
