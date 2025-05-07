@@ -47,7 +47,7 @@ import { GrResume } from "react-icons/gr";
 
     const handleSigninClub =  (e) =>{
         e.preventDefault()
-        axios.post(`${import.meta.env.VITE_API_URL}/club/sign-in`,{club_name,email,password,club_img},{
+        axios.post(`${import.meta.env.VITE_API_URL}/api/club/sign-in`,{club_name,email,password,club_img},{
           headers: { 
             "Content-Type": "multipart/form-data"
           },
@@ -85,7 +85,7 @@ import { GrResume } from "react-icons/gr";
 
     const handleLoginClub =  (e) =>{
       e.preventDefault()
-      axios.post(`${import.meta.env.VITE_API_URL}/club/login`,{login_email,login_password},{ withCredentials: true })
+      axios.post(`${import.meta.env.VITE_API_URL}/api/club/login`,{login_email,login_password},{ withCredentials: true })
       .then(result => {
         if(result.data === "No club with this email"){
           toast('No user with this email', {
@@ -135,7 +135,7 @@ import { GrResume } from "react-icons/gr";
   ///////////////////////
   const handleSignin =  (e) =>{
     e.preventDefault()
-    axios.post(`${import.meta.env.VITE_API_URL}/sign-in`,{firstname,lastname,email,phone,password},{ withCredentials: true })
+    axios.post(`${import.meta.env.VITE_API_URL}/api/sign-in`,{firstname,lastname,email,phone,password},{ withCredentials: true })
     .then(result => {
         if(result.data === "Email already exists"){
           console.log(result.data)
@@ -168,7 +168,7 @@ import { GrResume } from "react-icons/gr";
 
 const handleLogin =  (e) =>{
   e.preventDefault()
-  axios.post(`${import.meta.env.VITE_API_URL}/login`,{login_email,login_password},{ withCredentials: true })
+  axios.post(`${import.meta.env.VITE_API_URL}/api/login`,{login_email,login_password},{ withCredentials: true })
   .then(result => {
     if(result.data === "No user with this email"){
       toast('No user with this email', {

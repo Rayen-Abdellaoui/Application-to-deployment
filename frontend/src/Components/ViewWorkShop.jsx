@@ -13,7 +13,7 @@ function MyWorkshop(){
         const fetchWorkshops = async () => {
             setisLoading(true);
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}/myworkshop`,{ withCredentials: true });
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/myworkshop`,{ withCredentials: true });
             setWorkshops(response.data);
             console.log(response);
         } catch (err) {

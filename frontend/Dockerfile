@@ -5,6 +5,8 @@ WORKDIR /app/frontend
 COPY package*.json ./
 RUN npm install
 COPY . . 
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build  # Ensure the build process works
 
 # Step 2: Serve with Nginx
@@ -16,7 +18,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Copy build output to Nginx's web directory
 COPY --from=build /app/frontend/dist /usr/share/nginx/html
 
-ENV VITE_API_URL=${VITE_API_URL}
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

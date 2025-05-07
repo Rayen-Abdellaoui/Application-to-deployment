@@ -65,7 +65,7 @@ function Account() {
 
   const handleUpdate =  (e) =>{
     e.preventDefault()
-    axios.post(`http://${process.env.API_URI}:5555/api/user-account`,{firstname,lastname,phone,password,profile_img},{
+    axios.post(`${import.meta.env.VITE_API_URL}/api/user-account`,{firstname,lastname,phone,password,profile_img},{
       headers: { 
         "Content-Type": "multipart/form-data"
       },
@@ -92,7 +92,7 @@ function Account() {
                     <div className="relative h-96 w-96 m-8" style={{outerHeight:"5%",innerHeight:"5%"}}>
                       <img 
                           style={{width : "150px",height:"150px",borderRadius:"50%",margin:"5px"}} 
-                          src={`src/Components/WorkShop Card/uploads/${username[4]}`} 
+                          src={`../../uploads/${username[4]}`} 
                           alt="profile pic" 
                       /> 
                     </div>                      

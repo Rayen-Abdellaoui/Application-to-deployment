@@ -19,7 +19,7 @@ function Account() {
 
   const handleChangephoto =  (e) =>{
     e.preventDefault();
-    axios.post(`http://${process.env.API_URI}:5555/api/user-profile-pic`,{profile_img},{
+    axios.post(`${import.meta.env.VITE_API_URL}/api/user-profile-pic`,{profile_img},{
       headers: { 
         "Content-Type": "multipart/form-data"
       },

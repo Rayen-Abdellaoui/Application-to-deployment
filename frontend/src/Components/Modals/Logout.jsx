@@ -7,7 +7,7 @@ function Logout(){
     const navigate = useNavigate();
     const handleLogout =  (e) =>{
         e.preventDefault()
-        axios.get(`${import.meta.env.VITE_API_URL}/logout`,{ withCredentials: true })
+        axios.get(`${import.meta.env.VITE_API_URL}/api/logout`,{ withCredentials: true })
         .then(result => {
               console.log(result);
               navigate("/");

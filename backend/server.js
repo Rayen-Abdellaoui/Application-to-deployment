@@ -22,7 +22,7 @@ app.use(session({
 }))
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000', 
+    origin: 'http://localhost', 
     credentials: true 
 }));
 
@@ -156,7 +156,7 @@ app.get("/logout",async (req,res) =>{
 })
 
 //check if user logged
-app.get("/api/username", async (req,res) =>{
+app.get("/username", async (req,res) =>{
     if(req.session.user){
         res.status(200).send(req.session.user);
     }
@@ -182,7 +182,7 @@ app.get("/workshops", async (req,res) =>{
 )
 
 // Return myworkshop
-app.get("/api/myworkshop", async (req, res) => {
+app.get("/myworkshop", async (req, res) => {
     try {
         if (req.session.user) {
             if(req.session.user.role == 'User'){
@@ -225,7 +225,7 @@ app.get("/api/myworkshop", async (req, res) => {
 });
 
 // Delete myworkshop
-app.get("/api/delete-myworkshop/:id", async (req, res) => {
+app.get("/delete-myworkshop/:id", async (req, res) => {
     try {
         if (req.session.user) {
             if(req.session.user.role == 'User'){
@@ -267,7 +267,7 @@ app.get("/api/delete-myworkshop/:id", async (req, res) => {
 });
 
 const TestModel = require('./models/Test.js');
-app.post("/api/workshop-img", upload.single("workshop_img"), async (req,res) =>{
+app.post("/workshop-img", upload.single("workshop_img"), async (req,res) =>{
     const imageName = req.file.filename;
     try {
         await TestModel.create({workshop_img : imageName});
@@ -289,7 +289,7 @@ app.get("/get-image", async (req, res) => {
   });
 
 // Return one workshop by id
-app.get("/api/workshop/:id", async (req,res) =>{
+app.get("/workshop/:id", async (req,res) =>{
     const id = req.params.id;
     const workshop = await WorkShopsModel.findOne({_id : id});
     res.json(workshop);
@@ -298,7 +298,7 @@ app.get("/api/workshop/:id", async (req,res) =>{
 
 // Subscription
 
-app.get("/api/subscription/:id", async (req, res) => {
+app.get("/subscription/:id", async (req, res) => {
     try {
         if (req.session.user) {
             const user_id = String(req.session.user.user_id);
@@ -360,7 +360,7 @@ async function startApp() {
 startApp();
 
 // Check user workshops
-app.get("/api/checksubscription/:id", async (req,res) =>{
+app.get("/checksubscription/:id", async (req,res) =>{
     try {
         if(req.session.user){
             const user_id = String(req.session.user.user_id);
@@ -387,7 +387,7 @@ app.get("/api/checksubscription/:id", async (req,res) =>{
 )
 
 // User Info
-app.post("/api/user-account",upload.single("profile_img"), async (req,res) =>{
+app.post("/user-account",upload.single("profile_img"), async (req,res) =>{
     try {
         if(req.session.user){
             if(req.session.user.role == 'User'){
@@ -424,7 +424,7 @@ app.post("/api/user-account",upload.single("profile_img"), async (req,res) =>{
 }
 )
 
-app.get("/api/username-account", async (req,res) =>{
+app.get("/username-account", async (req,res) =>{
     try {
         if(req.session.user){
             if(req.session.user.role == 'User'){
@@ -457,7 +457,7 @@ app.get("/api/username-account", async (req,res) =>{
 )
 
 //change user profile pic
-app.post("/api/user-profile-pic",upload.single("file"),async (req,res) =>{
+app.post("/user-profile-pic",upload.single("file"),async (req,res) =>{
     const imageName = req.file.filename;
     try {
         if(req.session.user){
@@ -485,7 +485,7 @@ app.post("/api/user-profile-pic",upload.single("file"),async (req,res) =>{
 
 // add workshops
 
-app.post("/api/add-workshop",upload.single("profile_img"), async (req, res) => {
+app.post("/add-workshop",upload.single("profile_img"), async (req, res) => {
     try {
         if (req.session.user ) {
             if(req.session.user.role == "Club"){
@@ -510,7 +510,7 @@ app.post("/api/add-workshop",upload.single("profile_img"), async (req, res) => {
 
 // delete workshops
 
-app.get("/api/clubimg/:name", async (req, res) => {
+app.get("/clubimg/:name", async (req, res) => {
     try {
         const resultat  = await ClubModel.findOne({club_name : req.params.name});
         res.send(resultat.club_img);
@@ -519,7 +519,7 @@ app.get("/api/clubimg/:name", async (req, res) => {
     }
 });
 
-app.get("/api/workshopslength", async (req, res) => {
+app.get("/workshopslength", async (req, res) => {
     try {
         if (req.session.user ) {
             if(req.session.user.role == "Club"){

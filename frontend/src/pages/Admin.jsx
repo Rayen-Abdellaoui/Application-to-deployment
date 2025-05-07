@@ -18,7 +18,7 @@ export default function Admin() {
   const handleSignin =  (e) =>{
     e.preventDefault();
     const formData = new FormData();
-    axios.post(`${import.meta.env.VITE_API_URL}/club/sign-in`,{club_name,club_img,email,password},{headers: { "Content-Type": "multipart/form-data" },})
+    axios.post(`${import.meta.env.VITE_API_URL}/api/club/sign-in`,{club_name,club_img,email,password},{headers: { "Content-Type": "multipart/form-data" },})
     .then(result => {
         if(result.data === "Email already used"){
           console.log(result.data)
@@ -64,7 +64,7 @@ export default function Admin() {
           ? allImage.map( data => (
             (<img
               key={data._id}
-              src={`src/Components/WorkShop Card/uploads/${data.workshop_img}`}
+              src={`../../public/uploads/${data.workshop_img}`}
               height={200}
               width={400}
               alt='img'
